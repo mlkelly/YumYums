@@ -1,0 +1,14 @@
+.site-wrap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* fr = fractional*/
+    grid-gap: 1em;
+    
+};
+
+.site-wrap > div {
+    background: blue;
+}
+
+.header{
+    grid-template-areas: "header, header, header, header"
+}

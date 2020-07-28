@@ -4,14 +4,43 @@
         <title>YumYums</title>
         <meta charset ="UTF-8"/>
         <link rel="icon" href="" type="image/x-icon">
-        <link rel="stylesheet" href="css/style.css" type="text/css">
+        <link rel="stylesheet" href="css/styles.css" type="text/css">
     </head>
     <body>
-        <div id="header">
-
-        </div>
-        <div id="body">
-
+        <!-- <div class="site-wrap"> -->
+        <div> <!-- site wrap not working, alternate option -->
+            <div class="header">
+                <h1>header</h1>
+                <form id="search-form">
+                    <input type="text" name="search" placeholder="search recipes...">
+                    <input type="submit" name="submit" value="Search">
+                </form>
+            </div>
+            <div class="main-body">
+                <h1>main body</h1>
+                <div class="signup">
+                    <form id="signup-form">
+                        <input type="text" name="username" placeholder="username">
+                        <br>
+                        <input type="text" name="password" placeholder="password">
+                        <br>
+                        <input type="text" name="password-confirmation" placeholder="password confirmation">
+                        <br>
+                        <input type="submit" name="submit" value=" Sign Up">
+                    </form>
+                    <p>Already on YumYums, <u id="signin">Sign In</u></p>
+                    <form id = signin-form style="display:none">
+                        <input type="text" name="username" placeholder="username">
+                        <br>
+                        <input type="text" name="password" placeholder="password">
+                        <br>
+                        <input id="signin-btn" type="submit" name="submit" value="Sign In">
+                    </form>
+                </div>
+            </div>
+            <div class="footer">
+                <h1><footer></footer></h1>
+            </div>
         </div>
         <!-- main -->
         <script src="src/script.js"></script>
