@@ -5,10 +5,23 @@
     
 };
 
+.body{
+    background:lightskyblue
+}
+
 .site-wrap > div {
     background: blue;
 }
 
 .header{
     grid-template-areas: "header, header, header, header"
+}
+
+.mini-icon{
+    max-width: 40px;
+}
+
+.card {
+    background: pink;
+    margin: 30px
 }

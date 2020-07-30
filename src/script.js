@@ -10,6 +10,8 @@ function ce(element){
 
 
 const signUpForm = qs("form#signup-form")
+const feedBtn = qs("button#feed")
+const seachForm = qs("form#search-form")
 
 const p = qs("p")
 const login = qs("u#login")
@@ -39,6 +41,8 @@ const fullProfile = ce("div")
 const userRecipes = ce("p")
 const underline = ce("u")
 
+const recipePageDiv = ce("div")
+
 const pageTitle = ce("h1")
 const recipeBtnToggle = ce("button")
 const recipeForm = ce("form")
@@ -57,9 +61,16 @@ const br = ce("br")
 // const recipeAbt = ce("h3")
 // const recipeMoreBtn = ce("button")
 // const recipeRI = ce("p")
+const editRecipeForm = ce("form")
+const editRecipeTitleInput = ce("input")
+const editRecipeAbtInput = ce("input")
+const editRecipeImgInput = ce("input")
+const editRecipeSub = ce("button")
+let this_recipe = {}
 
 const recIngredList = ce("ul")
 
 let loginBoolean = false
 let newRecipeBoolean = false
 let editProfileBoolean = false
+let editRecipeBoolean = false

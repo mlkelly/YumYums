@@ -178,7 +178,7 @@ function displayProfile(current_user){
     editBioInput.value = current_user.bio
     editBioInput.placeholder = "Bio..."
     editAvatarInput.value = current_user.img
-    editAvatarInput.placeholder = "Image URL"
+    editAvatarInput.placeholder = "Image URL..."
     editProfileSubmit.type="submit"
     editProfileForm.style.display="none"
     // editProfileForm.append(editUsernameInput, editBioInput, editProfileSubmit)
@@ -222,7 +222,7 @@ userRecipes.addEventListener("click", ()=>{
 
     titleInput.placeholder="Title..."
     abtInput.placeholder="Description..."
-    imgInput.placeholder="Image Url"
+    imgInput.placeholder="Image Url..."
     createRecipeBtn.innerText="Create Recipe"
     // create default userInput input to loged in user
 
@@ -231,8 +231,9 @@ userRecipes.addEventListener("click", ()=>{
     userInput.type="hidden"
     recipeForm.append(titleInput, abtInput, imgInput, userInput, createRecipeBtn)
     recipeForm.style.display="none"
-
-    mainBodyDiv.append(pageTitle, recipeForm, br, recipeBtnToggle)
+    // debugger
+    recipePageDiv.append(pageTitle, recipeForm, br, recipeBtnToggle)
+    mainBodyDiv.prepend(recipePageDiv)
     fetchRecipes()
 })
 
@@ -261,11 +262,6 @@ function fetchRecipes(){
     })
 }
 
-// refactored in userRecipes event listener
-// function showRecipes(recipes){
-//     recipes.forEach(recipe => addRecipe(recipe))
-// }
-
 recipeBtnToggle.addEventListener("click", ()=>{
     console.log("new recipe toggled")
 
@@ -281,6 +277,7 @@ recipeBtnToggle.addEventListener("click", ()=>{
 
 // displays single recipe to DOM
 function addRecipe(recipe){
+    // debugger
     // need to create const inside of addRecipe so theres new tags for recipe not replacing existing ones
     const recipeCard = ce("div")
     const recipeCardContainer = ce("div")
@@ -290,14 +287,12 @@ function addRecipe(recipe){
     const recipeMoreBtn = ce("button")
     const recipeDeleteBtn = ce("button")
     const editRecipeBtn = ce("button")
-    let recipeMoreToggle = false
-    let this_recipe = {}
+    let recipeMoreToggle = false 
 
     this_recipe = recipe
 
     recipeCard.className="card"
     recipeCardContainer.className="container"
-
     if(recipe.img){
         recipeImg.src=recipe.img
     }
@@ -316,7 +311,8 @@ function addRecipe(recipe){
             recipeMoreBtn.innerText= "Show Less"
             editRecipeBtn.innerText="Edit Recipe"
             recipeDeleteBtn.innerText="Delete Recipe"
-            recipeCard.append(editRecipeBtn, recipeDeleteBtn)
+            recipeCard.insertBefore(editRecipeBtn, recipeMoreBtn)
+            recipeCard.insertBefore(recipeDeleteBtn, recipeMoreBtn)
         } else {
             // opposite of if to revert
             recipeMoreBtn.innerText="Show More"
@@ -326,10 +322,10 @@ function addRecipe(recipe){
     })
 
     recipeCard.append(recipeImg, recipeTitle, recipeAbt, recipeMoreBtn)
-    mainBodyDiv.append(recipeCard)
+    mainBodyDiv.prepend(recipeCard)
     // mainBodyDiv.append(recipeTitle, recipeAbt)
 
-    // can't put outside of listener, but be very careful of repetive actions, not best practice
+    // CAREFUL!!!
     recipeDeleteBtn.addEventListener("click", ()=>{
         console.log("going to delete recipe")
 
@@ -340,7 +336,7 @@ function addRecipe(recipe){
             }
         }
         // debugger
-        fetch(`http://localhost:3000/api/v1/recipes/${this_recipe.id}`, configObj) //says theres a 500 error, but it still deletes from the server and manipulates the DOM
+        fetch(`http://localhost:3000/api/v1/recipes/${recipe.id}`, configObj) //says theres a 500 error, but it still deletes from the server and manipulates the DOM
         .then(mainBodyDiv.removeChild(recipeCard))
     //     .then(res => {
     //         console.log("successful deleted")
@@ -350,13 +346,67 @@ function addRecipe(recipe){
     //     })
     })
 
-    // also needs to be inside of listener, but be cautious!!!!
+    // CAREFUL!!! // edit recipes form
     editRecipeBtn.addEventListener("click", ()=>{
-        console.log("going to edit recipe")
+        
+        // debugger
+        // make form pop appear on DOM
+        editRecipeTitleInput.placeholder = "Title..."
+        editRecipeTitleInput.value = recipe.title
+        editRecipeAbtInput.placeholder = "Description..."
+        editRecipeAbtInput.value = recipe.abt
+        editRecipeImgInput.placeholder = "Image URL..."
+        editRecipeImgInput.value = recipe.img
+        editRecipeSub.type="submit"
+        editRecipeSub.innerText="Edit Recipe"
 
+        editRecipeForm.append(editRecipeTitleInput, editRecipeAbtInput, editRecipeImgInput, editRecipeSub)
+        recipeCard.insertBefore(editRecipeForm, editRecipeBtn)
+        recipeCard.removeChild(editRecipeBtn)
+        this_recipe = recipe
     })
+
 }
 
+editRecipeSub.addEventListener("click", ()=>{
+    event.preventDefault()
+
+    let configObj={
+        method:"PATCH",
+        headers: {
+            "Content-Type":"application/json",
+            Authorization: `Bearer ${localStorage.token}` //sending auth token
+        },
+        body: JSON.stringify({
+            title: editRecipeForm[0].value,
+            abt: editRecipeForm[1].value,
+            img: editRecipeForm[2].value
+        })
+    }
+    // debugger
+    fetch(`http://localhost:3000/api/v1/recipes/${this_recipe.id}`, configObj)
+    // fetch(`http://localhost:3000/api/v1/users/${current_user.id}`, configObj)
+    .then(res => res.json())
+    // .then(console.log)
+    .then(updatedRecipe => {
+        console.log(updatedRecipe)
+        console.log("displaying updated recipe info")
+
+        addRecipe(updatedRecipe)
+        // profileAvatar.src = userInfo.img
+        // profileInfo.innerText = `username: ${userInfo.username}`
+        // if (userInfo.bio){
+        //     profileInfo2.innerText = "bio: " + `${userInfo.bio}`
+        // } else {
+        //     profileInfo2.innerText = "bio: *no current bio*"
+        // }
+        // // let current_userFluff = userInfo
+        // current_user.bio = userInfo.bio
+        // current_user.img = userInfo.img
+        // editProfileToggleHelper()
+   
+    })
+})
 
 // display each rec_ingred 
 // function displayRI(){
@@ -472,36 +522,5 @@ deleteUserBtn.addEventListener("click", ()=>{
         mainBodyDiv.innerHTML=""
         signUpForm.reset()
         mainBodyDiv.append(loginForm, loginHeaderToggle, signUpForm)
-    })
-})
-
-
-// recipeForm manipulations 
-recipeForm.addEventListener("submit",()=>{
-    event.preventDefault()
-    console.log("inside recipe form")
-
-    // post request to http://localhost:3000/api/v1/recipes
-    let configObj ={ 
-        method: "POST",
-        headers: {
-            "Content-Type":"application/json",
-            Authorization: `Bearer ${localStorage.token}` //sending auth token
-        },
-        body: JSON.stringify({
-            title: recipeForm[0].value,
-            abt: recipeForm[1].value,
-            img: recipeForm[2].value,
-            user_id: current_user.id
-        })
-    }
-    // debugger
-    fetch("http://localhost:3000/api/v1/recipes", configObj)
-    .then(res => res.json())
-    // .then(console.log)
-    .then(newRecipe => { 
-        // append the recipe card to the screen
-        addRecipe(newRecipe)
-        console.log("appended new Recipe to DOM")
     })
 })
