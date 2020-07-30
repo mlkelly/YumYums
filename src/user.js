@@ -142,6 +142,7 @@ function displayProfile(current_user){
     editAvatarInput.placeholder = "Image URL"
     editProfileSubmit.type="submit"
     editProfileForm.style.display="none"
+    // editProfileForm.append(editUsernameInput, editBioInput, editProfileSubmit)
     editProfileForm.append(editUsernameInput, editBioInput, editAvatarInput, editProfileSubmit)
     deleteUserBtn.type="button"
     deleteUserBtn.innerText ="Delete Account"
@@ -183,8 +184,8 @@ userRecipes.addEventListener("click", ()=>{
     createRecipeBtn.innerText="Create Recipe"
     // create default userInput input to loged in user
 
-    userInput.value= current_user.id
-    userInput.id="user-id"
+    // userInput.value= current_user.id
+    // userInput.id="user-id"
     userInput.type="hidden"
     recipeForm.append(titleInput, abtInput, imgInput, userInput, createRecipeBtn)
     recipeForm.style.display="none"
@@ -207,14 +208,14 @@ function fetchRecipes(){
     //     debugger //lets me look into user which is essentially http://localhost:3000/api/v1/users/${current_user.id} since browser throws error bc no headers are passed (aka not logged in)
     // })
     .then(user => {
-        debugger
-        // if(user.recipes){
-        //     user.recipes.forEach(recipe => addRecipe(recipe))
-        // } else {
-        //     noRecipeError.innerText="You have no recipes. Click on the 'Create Recipe' button to get started"
-        //     mainBodyDiv.append(noRecipeError)
-        //     console.log("this user has no recipes")
-        // }
+        // debugger
+        if(user.recipes.length >0){
+            user.recipes.forEach(recipe => addRecipe(recipe))
+        } else {
+            noRecipeError.innerText="You have no recipes. Click on the 'Create Recipe' button to get started"
+            mainBodyDiv.append(noRecipeError)
+            console.log("this user has no recipes")
+        }
     })
 }
 
@@ -300,9 +301,9 @@ function editProfileToggleHelper(){
         // } else {
         //     profileInfo2.innerText = "bio: *no current bio*"
         // }
-        mainBodyDiv.insertBefore(profileAvatar, mainBodyDiv.children[1])
-        mainBodyDiv.insertBefore(profileInfo, mainBodyDiv.children[2])
-        mainBodyDiv.insertBefore(profileInfo2, mainBodyDiv.children[3])
+        mainBodyDiv.insertBefore(profileAvatar, editProfileForm)
+        mainBodyDiv.insertBefore(profileInfo, editProfileForm)
+        mainBodyDiv.insertBefore(profileInfo2, editProfileForm)
         editProfileToggle.innerText="Edit Profile"
     }
 }
@@ -314,7 +315,7 @@ editProfileForm.addEventListener("submit", ()=>{
     let configObj = {
         method: "PATCH",
         headers: {
-            // "Content-Type":"application/json", //throws [object Object] error?
+            "Content-Type":"application/json", //throws [object Object] error?
             Authorization: `Bearer ${localStorage.token}` //sending auth token 
         },
         body: JSON.stringify({
@@ -330,14 +331,15 @@ editProfileForm.addEventListener("submit", ()=>{
         console.log(userInfo)
         console.log("showing updated info")
         // mainBodyDiv.innerHTML=""
-        profileAvatar.src = event.target[2].value
-        profileInfo.innerText = `username: ${event.target[1].value}`
-        if (event.target[1].value){
-            profileInfo2.innerText = "bio: " + `${event.target[1].value}`
+        profileAvatar.src = userInfo.img
+        profileInfo.innerText = `username: ${userInfo.username}`
+        if (userInfo.bio){
+            profileInfo2.innerText = "bio: " + `${userInfo.bio}`
         } else {
             profileInfo2.innerText = "bio: *no current bio*"
         }
-        current_user = userInfo
+        // let current_userFluff = userInfo
+        current_user.bio = userInfo.bio
         editProfileToggleHelper()
         // editProfileBoolean = !editProfileBoolean
         // if (editProfileBoolean){
