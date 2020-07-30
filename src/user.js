@@ -23,6 +23,43 @@ signUpForm.addEventListener("submit", ()=>{
         if(userInfo.token){
             localStorage.token = userInfo.token
             console.log(localStorage)
+            // display profile info
+            current_user = userInfo.user
+            // loggedinPage(current_user)
+                // loginBoolean = !loginBoolean;
+                // if (loginBoolean) {
+                //     loginForm.style.display="block"
+                //     loginHeaderToggle.innerText="Hide Login"
+                //     // headerDiv.removeChild(loginError)
+                // } else {
+                //     loginForm.style.display="none"
+                //     loginHeaderToggle.innerText="Login"
+                // }
+            
+                // deletes loginError from DOM once login validated
+                // if(headerDiv.lastChild === loginError){headerDiv.removeChild(loginError)} // if no error occurs, nothing to delete
+                // debugger
+                headerDiv.removeChild(loginHeaderToggle)
+                headerDiv.removeChild(loginForm)
+            
+                // removes login form, fresh canvas
+                mainBodyDiv.innerHTML=""
+                // current_user = userInfo.user //passing userInfo for reference elsewhere
+                displayProfile(current_user) //still works even if signed out
+            
+                // appending buttons to DOM
+                userRecipes.innerText ="My Recipes"
+                underline.append(userRecipes)
+                mainBodyDiv.prepend(underline) //only way to have 'My Recipes' not move when profileBtn clicked
+            
+                profileBtn.innerText="Profile"
+                logoutBtn.innerText="Log Out"
+                headerDiv.append(profileBtn, logoutBtn)            
+
+            // mainBodyDiv.removeChild(signUpForm)
+            // // headerDiv.removeChild()
+            // headerDiv.append(logoutBtn)
+            // displayProfile(current_user)
         } 
         // else {
         //     console.log("account not created")
@@ -49,6 +86,7 @@ function loginToggleHelper(){
     if (loginBoolean) {
         loginForm.style.display="block"
         loginHeaderToggle.innerText="Hide Login Form"
+        loginForm.reset()
     } else {
         loginForm.style.display="none"
         loginHeaderToggle.innerText="Login"
@@ -90,6 +128,7 @@ loginForm.addEventListener("submit", ()=>{
 })
 
 function loggedinPage(userInfo){
+    // debugger
     // hide login toggle and reset form   
     // loginBoolean = false
     loginBoolean = !loginBoolean;
@@ -324,7 +363,7 @@ editProfileForm.addEventListener("submit", ()=>{
             img: event.target[2].value
         })
     }
-    debugger
+    // debugger
     fetch(`http://localhost:3000/api/v1/users/${current_user.id}`, configObj) 
     .then(res => res.json())
     .then(userInfo => {
@@ -371,8 +410,11 @@ deleteUserBtn.addEventListener("click", ()=>{
         // console.log(res)
 
         // resets mainBody to intro page (login/signup)
+        headerDiv.removeChild(profileBtn)
+        headerDiv.removeChild(logoutBtn)
         mainBodyDiv.innerHTML=""
-        mainBodyDiv.append(loginForm, loginHeaderToggle)
+        signUpForm.reset()
+        mainBodyDiv.append(loginForm, loginHeaderToggle, signUpForm)
     })
 })
 
