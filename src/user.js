@@ -205,6 +205,9 @@ logoutBtn.addEventListener("click", ()=>{
 // profileBtn functionality
 profileBtn.addEventListener("click", ()=>{
     console.log("clicked profileBtn, now on profile view")
+    // debugger
+    mainBodyDiv.innerHTML=""
+    mainBodyDiv.prepend(underline)
     displayProfile(current_user)
 })
 
@@ -278,6 +281,20 @@ recipeBtnToggle.addEventListener("click", ()=>{
 
 // displays single recipe to DOM
 function addRecipe(recipe){
+    // need to create const inside of addRecipe so theres new tags for recipe not replacing existing ones
+    const recipeCard = ce("div")
+    const recipeCardContainer = ce("div")
+    const recipeImg = ce("img")
+    const recipeTitle = ce("h2")
+    const recipeAbt = ce("h3")
+    const recipeMoreBtn = ce("button")
+    const recipeDeleteBtn = ce("button")
+    const editRecipeBtn = ce("button")
+    let recipeMoreToggle = false
+    let this_recipe = {}
+
+    this_recipe = recipe
+
     recipeCard.className="card"
     recipeCardContainer.className="container"
 
@@ -287,20 +304,59 @@ function addRecipe(recipe){
     recipeTitle.innerText = recipe.title
     recipeAbt.innerText = recipe.abt 
     recipeMoreBtn.type="button"
-    recipeMoreBtn.innerText="show more info"
+    recipeMoreBtn.innerText="Show More"
 
     // want a new eventListener for each recipeCard, so creating it here inside addRecipe()
     recipeMoreBtn.addEventListener("click", ()=>{
         console.log("more info toggled")
         // recipe.rec_ingreds.forEach(rec_ingred => displayRI(rec_ingred))
         // recipeCard.append(recIngredList)
+        recipeMoreToggle = !recipeMoreToggle
+        if (recipeMoreToggle){
+            recipeMoreBtn.innerText= "Show Less"
+            editRecipeBtn.innerText="Edit Recipe"
+            recipeDeleteBtn.innerText="Delete Recipe"
+            recipeCard.append(editRecipeBtn, recipeDeleteBtn)
+        } else {
+            // opposite of if to revert
+            recipeMoreBtn.innerText="Show More"
+            recipeCard.removeChild(editRecipeBtn)
+            recipeCard.removeChild(recipeDeleteBtn)
+        }
     })
 
     recipeCard.append(recipeImg, recipeTitle, recipeAbt, recipeMoreBtn)
     mainBodyDiv.append(recipeCard)
     // mainBodyDiv.append(recipeTitle, recipeAbt)
 
+    // can't put outside of listener, but be very careful of repetive actions, not best practice
+    recipeDeleteBtn.addEventListener("click", ()=>{
+        console.log("going to delete recipe")
+
+        let configObj = {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}` //sending auth token
+            }
+        }
+        // debugger
+        fetch(`http://localhost:3000/api/v1/recipes/${this_recipe.id}`, configObj) //says theres a 500 error, but it still deletes from the server and manipulates the DOM
+        .then(mainBodyDiv.removeChild(recipeCard))
+    //     .then(res => {
+    //         console.log("successful deleted")
+
+    //         // delete card from DOM
+    //         mainBodyDiv.removeChild(recipeCard)
+    //     })
+    })
+
+    // also needs to be inside of listener, but be cautious!!!!
+    editRecipeBtn.addEventListener("click", ()=>{
+        console.log("going to edit recipe")
+
+    })
 }
+
 
 // display each rec_ingred 
 // function displayRI(){
@@ -379,6 +435,7 @@ editProfileForm.addEventListener("submit", ()=>{
         }
         // let current_userFluff = userInfo
         current_user.bio = userInfo.bio
+        current_user.img = userInfo.img
         editProfileToggleHelper()
         // editProfileBoolean = !editProfileBoolean
         // if (editProfileBoolean){
@@ -428,6 +485,7 @@ recipeForm.addEventListener("submit",()=>{
     let configObj ={ 
         method: "POST",
         headers: {
+            "Content-Type":"application/json",
             Authorization: `Bearer ${localStorage.token}` //sending auth token
         },
         body: JSON.stringify({
@@ -437,7 +495,13 @@ recipeForm.addEventListener("submit",()=>{
             user_id: current_user.id
         })
     }
-    debugger
+    // debugger
     fetch("http://localhost:3000/api/v1/recipes", configObj)
-    .then(console.log)
+    .then(res => res.json())
+    // .then(console.log)
+    .then(newRecipe => { 
+        // append the recipe card to the screen
+        addRecipe(newRecipe)
+        console.log("appended new Recipe to DOM")
+    })
 })
