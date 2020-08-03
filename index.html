@@ -3,14 +3,14 @@
     <head>
         <title>YumYums</title>
         <meta charset ="UTF-8"/>
-        <link rel="icon" href="" type="image/x-icon">
+        <link rel="icon" href="assets/favicon.jpg" type="image/x-icon">
         <link rel="stylesheet" href="css/styles.css" type="text/css">
     </head>
-    <body>
+    <body class="body">
         <!-- <div class="site-wrap"> -->
-        <div> <!-- site wrap not working, alternate option -->
+        <div class="main-content"> <!-- site wrap not working, alternate option -->
             <div class="header">
-                <h1>header</h1>
+                <h1>YumYums</h1>
                 <form id="search-form">
                     <input type="text" name="search" placeholder="search recipes...">
                     <input type="submit" name="submit" value="Search">
@@ -28,29 +28,35 @@
                 <button id="login-header-toggle">Login</button>
             </div>
             <div class="main-body">
-                <h1>main body</h1>
-                <div class="signup">
-                    <form id="signup-form">
-                        <input type="text" name="username" placeholder="username">
-                        <br>
-                        <input type="password" name="password" placeholder="password">
-                        <br>
-                        <!-- <input type="text" name="password-confirmation" placeholder="password confirmation"> -->
-                        <br>
-                        <input type="submit" value="Sign Up">
-                    </form>
-                    <p>Already on YumYums, <u id="login">Login</u></p>
-                    <!-- <form id = login-form style="display:none">
-                        <input type="text" name="username" placeholder="username">
-                        <br>
-                        <input type="text" name="password" placeholder="password">
-                        <br>
-                        <input id="login-btn" type="submit" value="Log In">
-                    </form> -->
+                <div class="container">
+                    <h1></h1>
+                    <div class="signup">
+                        <form id="signup-form">
+                            <input type="text" name="username" placeholder="username">
+                            <br>
+                            <input type="password" name="password" placeholder="password">
+                            <br>
+                            <!-- <input type="text" name="password-confirmation" placeholder="password confirmation"> -->
+                            <br>
+                            <input type="submit" value="Sign Up">
+                        </form>
+                        <p>Already on YumYums, <u id="login">Login</u></p>
+                        <!-- <form id = login-form style="display:none">
+                            <input type="text" name="username" placeholder="username">
+                            <br>
+                            <input type="text" name="password" placeholder="password">
+                            <br>
+                            <input id="login-btn" type="submit" value="Log In">
+                        </form> -->
+                    </div>
                 </div>
             </div>
             <div class="footer">
-                <h1><footer>footer</footer></h1>
+                <footer>
+                    <br>
+                    <p>For futher questions see the <a href="https://github.com/mlkelly/yumyums">GitRepo</a>.</p>
+                    <br>
+                </footer>
             </div>
         </div>
         <!-- scripts !!! ORDER MATTERS !!! -->

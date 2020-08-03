@@ -104,11 +104,11 @@ feedBtn.addEventListener("click", ()=>{
         avatar.src = recipe.user.img
         avatar.className = "mini-icon"
         username.innerText = recipe.user.username
-        if(recipe.img){
-            recipeImg.src=recipe.img
-        }
+        recipeImg.className="card-cover-img"
+        recipeImg.src=recipe.img
         recipeTitle.innerText = recipe.title
         recipeAbt.innerText = recipe.abt 
+        recipeMoreBtn.className="more-button"
         recipeMoreBtn.type="button"
         recipeMoreBtn.innerText="Show More"
 

@@ -164,6 +164,7 @@ function loggedinPage(userInfo){
 // helper method to display only profile info 
 function displayProfile(current_user){
     // filling/appending profile info to DOM
+    profileAvatar.className="profile-pic"
     profileAvatar.src = current_user.img
     profileInfo.innerText= `username: ${current_user.username}`
     if (current_user.bio){
@@ -171,6 +172,7 @@ function displayProfile(current_user){
     } else {
         profileInfo2.innerText = "bio: *no current bio*"
     }
+    // debugger
     // current_user = userInfo.user //passing userInfo for reference elsewhere
     editProfileToggle.innerText = "Edit Profile" 
     editUsernameInput.value = current_user.username
@@ -197,6 +199,7 @@ logoutBtn.addEventListener("click", ()=>{
     // loginForm.style.display="block"
     loginForm.reset()
     headerDiv.removeChild(logoutBtn)
+    headerDiv.removeChild(feedBtn)
     mainBodyDiv.append(signUpForm)
     headerDiv.removeChild(profileBtn) //removes bc profileBtn works even when logged out bc of current_user variable
     headerDiv.append(loginHeaderToggle)
@@ -223,6 +226,8 @@ userRecipes.addEventListener("click", ()=>{
     titleInput.placeholder="Title..."
     abtInput.placeholder="Description..."
     imgInput.placeholder="Image Url..."
+    imgInput.type="text"
+    imgInput.value="assets/recipe-default.jpg"
     createRecipeBtn.innerText="Create Recipe"
     // create default userInput input to loged in user
 
@@ -253,7 +258,10 @@ function fetchRecipes(){
     .then(user => {
         // debugger
         if(user.recipes.length >0){
-            user.recipes.forEach(recipe => addRecipe(recipe))
+            user.recipes.forEach(recipe => {
+                addRecipe(recipe)
+                // addRecIngreds(recipe)
+            })
         } else {
             noRecipeError.innerText="You have no recipes. Click on the 'Create Recipe' button to get started"
             mainBodyDiv.append(noRecipeError)
@@ -293,17 +301,18 @@ function addRecipe(recipe){
 
     recipeCard.className="card"
     recipeCardContainer.className="container"
-    if(recipe.img){
-        recipeImg.src=recipe.img
-    }
+    recipeImg.className="card-cover-img"
+    recipeImg.src=recipe.img
     recipeTitle.innerText = recipe.title
     recipeAbt.innerText = recipe.abt 
     recipeMoreBtn.type="button"
+    recipeMoreBtn.className="more-button"
     recipeMoreBtn.innerText="Show More"
 
     // want a new eventListener for each recipeCard, so creating it here inside addRecipe()
     recipeMoreBtn.addEventListener("click", ()=>{
         console.log("more info toggled")
+        // debugger
         // recipe.rec_ingreds.forEach(rec_ingred => displayRI(rec_ingred))
         // recipeCard.append(recIngredList)
         recipeMoreToggle = !recipeMoreToggle
@@ -311,11 +320,16 @@ function addRecipe(recipe){
             recipeMoreBtn.innerText= "Show Less"
             editRecipeBtn.innerText="Edit Recipe"
             recipeDeleteBtn.innerText="Delete Recipe"
+            // const li = ce("li")
+            // li.innerText=""
+            // ingredList.append(li)
+            // recipeCard.insertBefore(ingredList, recipeMoreBtn)
             recipeCard.insertBefore(editRecipeBtn, recipeMoreBtn)
             recipeCard.insertBefore(recipeDeleteBtn, recipeMoreBtn)
         } else {
             // opposite of if to revert
             recipeMoreBtn.innerText="Show More"
+            // recipeCard.removeChild(ingredList)
             recipeCard.removeChild(editRecipeBtn)
             recipeCard.removeChild(recipeDeleteBtn)
         }
@@ -481,7 +495,7 @@ editProfileForm.addEventListener("submit", ()=>{
         if (userInfo.bio){
             profileInfo2.innerText = "bio: " + `${userInfo.bio}`
         } else {
-            profileInfo2.innerText = "bio: *no current bio*"
+            profileInfo2.innerText = "bio: *current has no bio*"
         }
         // let current_userFluff = userInfo
         current_user.bio = userInfo.bio

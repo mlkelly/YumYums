@@ -1,27 +1,62 @@
-.site-wrap {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* fr = fractional*/
-    grid-gap: 1em;
-    
-};
-
-.body{
-    background:lightskyblue
+.body {
+    background-image: url(https://i.pinimg.com/564x/d2/61/9b/d2619b4dfd06f5a17376f0e8de6af22a.jpg);
+    background-repeat: repeat;
+    /* background: rgb(122, 172, 189); */
+    font-family: Helvetica, sans-serif;;
 }
 
-.site-wrap > div {
-    background: blue;
+.header {
+    padding: 20px;
+    background: lightblue;
+    background-blend-mode: lighten;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-.header{
-    grid-template-areas: "header, header, header, header"
+.footer {
+    margin-top: 10px;
+    padding: 20px;
+    background: lightblue;
+    background-blend-mode: lighten;
+    text-align:center;
+}
+
+.main-content {
+    margin: 15px;
 }
 
 .mini-icon{
     max-width: 40px;
-}
+};
 
 .card {
-    background: pink;
-    margin: 30px
+    background:rgb(228, 132, 228);
+}
+
+.main-body {
+    /* background-image: url(https://i.pinimg.com/564x/d2/61/9b/d2619b4dfd06f5a17376f0e8de6af22a.jpg);
+    background-repeat: repeat; */
+    background-color: grey;
+    background-blend-mode: lighten;
+    padding: 50px;
+}
+
+.main-body > .card {
+    margin: 15px;
+    background:rgb(228, 132, 228);
+    padding: 5%;
+}
+
+.card > .card-cover-img {
+    max-width: 100%;
+    text-align: center;
+}
+
+.main-body > .profile-pic {
+    max-width: 150px;
+}
+
+.main-body > #signup {
+    margin: 50%;
+    text-align: center;
 }
